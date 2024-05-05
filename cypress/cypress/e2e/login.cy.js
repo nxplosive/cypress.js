@@ -19,15 +19,32 @@ describe('Проверка авторизации', function () {
         cy.get(main_page.password).type(data.password);
         cy.get(main_page.login_button).click();
 
-        cy.wait(1000);
-
         cy.get(result_page.title).contains('Авторизация прошла успешно');
+        cy.get(result_page.title).should('be.visible');
+    })
+
+    it('Восстановить пароль', function () {
+        cy.get(main_page.fogot_pass_btn).click();
+
+        cy.get(recovery_page.email).type(data.login);
+        cy.get(recovery_page.send_button).click()
+
+        cy.get(result_page.title).contains('Успешно отправили пароль на e-mail');
         cy.get(result_page.title).should('be.visible');
     })
 
     it('Верный логин и неверный пароль', function () {
         cy.get(main_page.email).type(data.login);
         cy.get(main_page.password).type('iLoveqastudio7');
+        cy.get(main_page.login_button).click();
+
+        cy.get(result_page.title).contains('Такого логина или пароля нет');
+        cy.get(result_page.title).should('be.visible');
+    })
+
+    it('Неверный логин и верный пароль', function () {
+        cy.get(main_page.email).type('vasyapupkin@yondax.foo');
+        cy.get(main_page.password).type(data.password);
         cy.get(main_page.login_button).click();
 
         cy.get(result_page.title).contains('Такого логина или пароля нет');
@@ -43,13 +60,12 @@ describe('Проверка авторизации', function () {
         cy.get(result_page.title).should('be.visible');
     })
 
-    it('Восстановить пароль', function () {
-        cy.get(main_page.fogot_pass_btn).click();
+    it('Проверяем на приведение к строчным буквам в логине', function () {
+        cy.get(main_page.email).type('GerMan@Dolnikov.ru');
+        cy.get(main_page.password).type(data.password);
+        cy.get(main_page.login_button).click();
 
-        cy.get(recovery_page.email).type(data.login);
-        cy.get(recovery_page.send_button).click()
-
-        cy.get(result_page.title).contains('Успешно отправили пароль на e-mail');
+        cy.get(result_page.title).contains('Нужно исправить проблему валидации');
         cy.get(result_page.title).should('be.visible');
     })
 })
