@@ -65,7 +65,7 @@ describe('Проверка авторизации', function () {
         cy.get(main_page.password).type(data.password);
         cy.get(main_page.login_button).click();
 
-        cy.get(result_page.title).contains('Нужно исправить проблему валидации');
+        cy.get(result_page.title).contains('Такого логина или пароля нет');
         cy.get(result_page.title).should('be.visible');
     })
 })
